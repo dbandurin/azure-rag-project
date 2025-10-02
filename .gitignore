@@ -1,0 +1,35 @@
+# .gitignore
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Environment Variables
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project Specific
+faiss_articles_db/
+*.pdf
+*.log
+
+# Azure
+local.settings.json
+.azure/
+
+# OS
+.DS_Store
+Thumbs.db.env
