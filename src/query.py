@@ -7,6 +7,7 @@ from azure.search.documents import SearchClient
 from azure.core.credentials import AzureKeyCredential
 from langchain_anthropic import ChatAnthropic
 from sentence_transformers import SentenceTransformer
+from azure.search.documents.models import VectorizedQuery
 import os
 from dotenv import load_dotenv
 from typing import Dict, List
@@ -53,8 +54,7 @@ def get_llm():
     if _llm is None:
         _llm = ChatAnthropic(
             model="claude-sonnet-4-5-20250929",
-            temperature=0,
-            anthropic_api_key=ANTHROPIC_API_KEY
+            temperature=0
         )
     return _llm
 
@@ -85,14 +85,16 @@ def query_azure_rag(question: str, top_k: int = 4, verbose: bool = True) -> Dict
     query_embedding = embedding_model.encode(question).tolist()
     
     # Vector search in Azure AI Search
+    vector_query = VectorizedQuery(
+        vector=query_embedding,
+        k_nearest_neighbors=top_k,
+        fields="content_vector"
+    )
+
     results = search_client.search(
-        search_text=None,  # Pure vector search
-        vector_queries=[{
-            "vector": query_embedding,
-            "k_nearest_neighbors": top_k,
-            "fields": "content_vector"
-        }],
-        select=["content", "source_file", "page_number", "chunk_id"]
+        search_text=None,
+        vector_queries=[vector_query],
+        select=["content", "source_file", "page_number"]
     )
     
     # Gather context
