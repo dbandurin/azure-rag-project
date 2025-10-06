@@ -7,12 +7,12 @@ az group create --name rg-rag-system --location eastus
 az storage account create   --name stragdocs   --resource-group rg-rag-system   --location eastus   --sku Standard_LRS
 
 #Create AI Search 
-az search service create   --name srch-articles-rag   --resource-group rg-rag-system   --location eastus   --sku basic
+az search service create   --name search-articles-rag   --resource-group rg-rag-system   --location eastus   --sku basic
 
 
 # Check your search service status
 az search service show \
-  --name srch-articles-rag \
+  --name search-articles-rag \
   --resource-group rg-rag-system \
   --query "{name:name, status:status, sku:sku.name, location:location}"
 
